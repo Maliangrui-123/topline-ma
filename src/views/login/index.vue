@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import request from '@/utils/request'
+import { login } from '@/api/user'
 
 export default {
   name: 'LoginPage',
@@ -44,19 +44,14 @@ export default {
 
       // 2.表单验证
       // 开始登录login效果
+      this.$toast.loading({
+        duration: 0, // 持续战士toast
+        message: '登录中...',
+        forbidClick: true // 是否禁用背景点击
+      })
+      // 3.请求登录
       try {
-        this.$toast.loading({
-          duration: 0, // 持续战士toast
-          message: '登录中...',
-          forbidClick: true // 是否禁用背景点击
-        })
-
-        // 3.请求登录
-        const res = await request({
-          method: 'POST',
-          url: '/app/v1_0/authorizations',
-          data: user // 请求体参数
-        })
+        const res = await login(user)
         console.log(res)
         // 提示成功
         this.$toast.success('登录成功')
