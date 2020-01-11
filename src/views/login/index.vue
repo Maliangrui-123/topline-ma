@@ -6,7 +6,7 @@
     <!-- 登录表单 -->
     <van-cell-group>
       <van-field v-model="user.mobile" left-icon="contact" clearable placeholder="请输入手机号" />
-      <van-field v-model="user.code" placeholder="请输入验证码" required>
+      <van-field v-model="user.code" placeholder="请输入验证码">
         <van-button round slot="button" size="small" type="primary">发送验证码</van-button>
       </van-field>
     </van-cell-group>
@@ -43,14 +43,27 @@ export default {
       const user = this.user
 
       // 2.表单验证
+      // 开始登录login效果
+      try {
+        this.$toast.loading({
+          duration: 0, // 持续战士toast
+          message: '登录中...',
+          forbidClick: true // 是否禁用背景点击
+        })
 
-      // 3.请求登录
-      const res = await request({
-        method: 'POST',
-        url: '/app/v1_0/authorizations',
-        data: user // 请求体参数
-      })
-      console.log(res)
+        // 3.请求登录
+        const res = await request({
+          method: 'POST',
+          url: '/app/v1_0/authorizations',
+          data: user // 请求体参数
+        })
+        console.log(res)
+        // 提示成功
+        this.$toast.success('登录成功')
+      } catch (err) {
+        console.log('登录失败', err)
+        this.$toast.fail('登录失败')
+      }
       // 4.根据后端返回结果执行处理
     }
   }
